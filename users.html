@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Список участников</title>
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #333333;
+            --border-color: #e0e0e0;
+            --header-bg: #f8f9fa;
+            --hover-bg: #f5f5f5;
+            --primary-color: #4361ee;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: #f5f7fa;
+            margin: 0;
+            padding: 0;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 30px;
+            background: var(--bg-color);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--text-color);
+            font-weight: 600;
+        }
+
+        .data-container {
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        iframe {
+            width: 100%;
+            height: 600px;
+            border: none;
+            background: var(--bg-color);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+
+        .refresh-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .refresh-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                margin: 20px auto;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Список зарегистрированных участников</h1>
+
+        <div class="controls">
+            <div class="last-update">Последнее обновление: <span id="update-time"></span></div>
+            <button class="refresh-btn" onclick="refreshData()">Обновить данные</button>
+        </div>
+
+        <div class="data-container">
+            <iframe
+                src="https://docs.google.com/spreadsheets/d/e/2PACX-1vTfKVVXGiizcwWyhWlRbIOCB2GU8iRElxKT5RDVpzVuV4-2fF07upftMXppqMG7_8A5TcZMZElWkpw_/pubhtml?gid=1965186767&ampsingle=true&widget=false&headers=false&chrome=false&gridlines=false"
+                id="data-frame"
+            ></iframe>
+        </div>
+    </div>
+
+    <script>
+        // Обновляем время последнего обновления
+        function updateTimestamp() {
+            const now = new Date();
+            document.getElementById('update-time').textContent =
+                now.toLocaleString('ru-RU', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+        }
+
+        // Функция обновления данных
+        function refreshData() {
+            const iframe = document.getElementById('data-frame');
+            iframe.src = iframe.src.split('&')[0] + '&random=' + Math.random();
+            updateTimestamp();
+        }
+
+        // Инициализация при загрузке
+        document.addEventListener('DOMContentLoaded', function() {
+            updateTimestamp();
+
+            // Автообновление каждые 5 минут
+            setInterval(refreshData, 300000);
+        });
+    </script>
+</body>
+</html>
